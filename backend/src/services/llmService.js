@@ -1,7 +1,7 @@
 const { GoogleGenAI } = require('@google/genai');
 
 const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY || 'MOCK_KEY_FOR_TESTING'
+    apiKey: process.env.GEMINI_API_KEY
 });
 
 /**
@@ -11,10 +11,7 @@ const ai = new GoogleGenAI({
  */
 async function analyzeFeedbackWithLLM(feedbackItems) {
     if (!process.env.GEMINI_API_KEY) {
-        console.warn("No GEMINI_API_KEY provided in .env! Using mock analysis as fallback.");
-        // Simulate delay for realism
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        return getMockAnalysisResponse(feedbackItems.length);
+        throw new Error("Missing GEMINI_API_KEY in backend/.env file. Please add it to enable LLM analysis.");
     }
 
     try {
@@ -62,7 +59,7 @@ async function analyzeFeedbackWithLLM(feedbackItems) {
 
     } catch (error) {
         console.error("LLM Analysis Error:", error);
-        throw new Error("Failed to analyze feedback using LLM.");
+        throw new Error("Failed to analyze feedback using LLM. Check server logs.");
     }
 }
 
@@ -73,10 +70,7 @@ async function analyzeFeedbackWithLLM(feedbackItems) {
  */
 async function generatePRDWithLLM(groupedFeedback) {
     if (!process.env.GEMINI_API_KEY) {
-        console.warn("No GEMINI_API_KEY provided in .env! Using mock PRD as fallback.");
-        // Simulate delay for realism
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        return getMockPRDResponse();
+        throw new Error("Missing GEMINI_API_KEY in backend/.env file. Please add it to enable PRD generation.");
     }
 
     try {
@@ -109,83 +103,9 @@ async function generatePRDWithLLM(groupedFeedback) {
         return response.text;
     } catch (error) {
         console.error("LLM PRD Generation Error:", error);
-        throw new Error("Failed to generate PRD using LLM.");
+        throw new Error("Failed to generate PRD using LLM. Check server logs.");
     }
 }
-
-
-// --- Mock Responses (Fallback if no API key is provided) ---
-
-function getMockAnalysisResponse(totalCount) {
-    return {
-        summary: {
-            totalItems: totalCount,
-            bugs: 2,
-            featureRequests: 3,
-            complaints: 1,
-            praise: 1
-        },
-        groupedFeedback: [
-            {
-                id: "g1",
-                category: "Feature Request",
-                topic: "Dark Mode UI",
-                description: "Users are requesting a dark mode theme for better nighttime visibility.",
-                priority: "High",
-                count: 12
-            },
-            {
-                id: "g2",
-                category: "Bug",
-                topic: "Login Button Unresponsive",
-                description: "The login button sometimes requires double clicks to work.",
-                priority: "High",
-                count: 5
-            },
-            {
-                id: "g3",
-                category: "Complaint",
-                topic: "Slow Dashboard Loading",
-                description: "The main dashboard takes too long to load data.",
-                priority: "Medium",
-                count: 8
-            }
-        ],
-        humanReviewRequired: [
-            {
-                originalText: "It just doesn't feel right sometimes when I use it.",
-                reason: "Extremely vague description, unable to identify specific issue or category."
-            }
-        ]
-    };
-}
-
-function getMockPRDResponse() {
-    return `# Product Requirements Document
-
-## 1. Executive Summary
-Based on recent customer feedback, this PRD outlines critical updates required for the platform. The primary focus is on resolving high-priority login issues, improving overall performance, and introducing highly requested features such as Dark Mode.
-
-## 2. Key Objectives
-* Resolve user login friction.
-* Increase user satisfaction by implementing Dark Mode.
-* Decrease dashboard load times by at least 30%.
-
-## 3. Features & Enhancements
-* **Dark Mode UI**: Implement a system-wide dark theme toggle.
-
-## 4. Bug Fixes
-* **Login Button**: Fix the event listener bug causing the login button to require multiple clicks.
-
-## 5. User Pain Points
-* **Dashboard Performance**: Users find the dashboard too slow, directly impacting their workflow.
-
-## 6. Success Metrics
-* 0% bug reports related to login after deployment.
-* 40% adoption rate of Dark Mode within the first week.
-* Average dashboard load time under 2 seconds.`;
-}
-
 
 module.exports = {
     analyzeFeedbackWithLLM,
