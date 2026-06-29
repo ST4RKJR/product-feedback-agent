@@ -28,7 +28,8 @@ async function analyzeFeedbackWithLLM(feedbackItems) {
            - A summary description of the collective feedback
            - A priority ("High", "Medium", "Low") based on urgency/impact
            - The count of how many items were in this group
-        4. If any individual feedback item is too ambiguous, vague, or you have low confidence in its categorization, do NOT group it. Instead, flag it for "humanReviewRequired". Provide the original text and the reason it needs review.
+           - A confidenceScore (integer from 0 to 100) representing your confidence in this grouping.
+        4. If any individual feedback item is too ambiguous, vague, or you have low confidence in its categorization (e.g., confidenceScore < 60), do NOT group it. Instead, flag it for "humanReviewRequired". Provide the original text, the reason it needs review, and a low confidenceScore (0-59).
 
         Feedback items:
         ${JSON.stringify(feedbackItems)}
@@ -37,10 +38,10 @@ async function analyzeFeedbackWithLLM(feedbackItems) {
         {
           "summary": { "totalItems": number, "bugs": number, "featureRequests": number, "complaints": number, "praise": number },
           "groupedFeedback": [
-            { "id": "string", "category": "string", "topic": "string", "description": "string", "priority": "string", "count": number }
+            { "id": "string", "category": "string", "topic": "string", "description": "string", "priority": "string", "count": number, "confidenceScore": number }
           ],
           "humanReviewRequired": [
-            { "originalText": "string", "reason": "string" }
+            { "originalText": "string", "reason": "string", "confidenceScore": number }
           ]
         }
         `;

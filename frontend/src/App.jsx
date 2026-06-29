@@ -159,6 +159,7 @@ function App() {
                     <th>Category</th>
                     <th>Priority</th>
                     <th>Count</th>
+                    <th>Confidence</th>
                     <th>Description</th>
                   </tr>
                 </thead>
@@ -177,6 +178,18 @@ function App() {
                         </span>
                       </td>
                       <td>{group.count}</td>
+                      <td style={{ minWidth: '120px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '2px' }}>
+                          <span>{group.confidenceScore || 0}%</span>
+                        </div>
+                        <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '9999px', overflow: 'hidden' }}>
+                          <div style={{ 
+                            width: `${group.confidenceScore || 0}%`, 
+                            height: '100%', 
+                            background: group.confidenceScore > 80 ? '#10b981' : group.confidenceScore > 50 ? '#f59e0b' : '#ef4444' 
+                          }}></div>
+                        </div>
+                      </td>
                       <td className="text-muted">{group.description}</td>
                     </tr>
                   ))}
@@ -218,13 +231,19 @@ function App() {
                 <table>
                   <thead>
                     <tr>
+                      <th>Confidence</th>
                       <th>Original Text</th>
-                      <th>Agent Reason</th>
+                      <th>Agent Reason (Why it was flagged)</th>
                     </tr>
                   </thead>
                   <tbody>
                     {analysisResult.humanReviewRequired.map((item, idx) => (
                       <tr key={idx}>
+                        <td style={{ minWidth: '100px' }}>
+                           <span className="badge" style={{ background: 'rgba(239, 68, 68, 0.15)', color: '#fca5a5' }}>
+                             {item.confidenceScore || 0}%
+                           </span>
+                        </td>
                         <td style={{ maxWidth: '400px', whiteSpace: 'normal', wordWrap: 'break-word' }}>"{item.originalText}"</td>
                         <td className="text-muted" style={{ maxWidth: '400px', whiteSpace: 'normal', wordWrap: 'break-word' }}>{item.reason}</td>
                       </tr>

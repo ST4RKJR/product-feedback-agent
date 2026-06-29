@@ -1,0 +1,11 @@
+id,date,feedback,source,user_segment
+1,2026-06-25,"The app crashes immediately when I try to open the analytics dashboard on my iPad.",App Store,Enterprise
+2,2026-06-25,"I love the new dark mode! It's so much easier on the eyes.",Twitter,Free
+3,2026-06-26,"Can you guys please add an export to PDF feature for the reports? It would save me hours.",Email,Pro
+4,2026-06-26,"The login button sometimes requires me to click it twice before it actually logs me in.",In-App,Pro
+5,2026-06-27,"Dashboard takes a solid 10 seconds to load sometimes. Too slow.",Reddit,Free
+6,2026-06-27,"I am unable to reset my password using the link sent to my email. It says expired immediately.",Support Ticket,Enterprise
+7,2026-06-28,"We need a way to bulk delete items. Deleting them one by one is ridiculous.",Email,Pro
+8,2026-06-28,"The new search bar is super fast. Great job on the latest update!",App Store,Pro
+9,2026-06-29,"Sometimes when I use the app, it just feels a bit weird.",In-App,Free
+10,2026-06-29,"Is there any plan to integrate with Slack? That would be a game changer.",Twitter,Enterprise
